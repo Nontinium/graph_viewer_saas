@@ -47,15 +47,26 @@ if uploaded_file:
     x = st.selectbox("x axis", dataframe.columns[:])
     y = st.selectbox("y axis", dataframe.columns[:])
 
+plot_type = st.selectbox("plot type", ['line plot', 'scatter plot'])
+
+st.text(plot_type)
+
 if uploaded_file and x and y:
     st.line_chart(dataframe, x = x, y = y)
     fig, ax = plt.subplots()
-    sns.lineplot(data=dataframe, x=x, y=y, ax=ax)
+    if plot_type == "line plot":
+        sns.lineplot(data=dataframe, x=x, y=y, ax=ax)
+    elif plot_type == "scatter plot":
+        sns.scatterplot(data=dataframe, x=x, y=y, ax=ax)
+    else:
+        sns.boxplot(data=dataframe, x=x, y=y, ax=ax)
     st.pyplot(fig)
 
-    fn = 'scatter.png'
+    image_download_name = st.text_input("imagename", "image_name.png")
+
+    fn = image_download_name
     img = io.BytesIO()
-    plt.savefig(img, format='png')
+    plt.savefig(img)
     
     btn = st.download_button(
     label="Download image",
