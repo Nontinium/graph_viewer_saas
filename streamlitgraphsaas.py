@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns 
+import io
 
 if 'file_csv_key' not in st.session_state:
     st.session_state['file_csv_key'] = False
@@ -52,5 +53,13 @@ if uploaded_file and x and y:
     sns.lineplot(data=dataframe, x=x, y=y, ax=ax)
     st.pyplot(fig)
 
-    if st.button("download"):
-        plt.savefig("matplotfigures.png")
+    fn = 'scatter.png'
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    
+    btn = st.download_button(
+    label="Download image",
+    data=img,
+    file_name=fn,
+    mime="image/png"
+    )
