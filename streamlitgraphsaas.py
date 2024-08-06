@@ -51,20 +51,29 @@ else:
     st.info("Please upload a file to proceed.")
 
 if dataframe is not None:
-    x = st.selectbox("x axis", dataframe.columns[:])
-    y = st.selectbox("y axis", dataframe.columns[:])
-    plot_type = st.selectbox("plot type", ['line plot', 'scatter plot'])
+    st.dataframe(dataframe.head(5))
+    x_options = ['None'] + list(dataframe.columns)
+    x = st.selectbox("x axis", x_options)
+    y_options = ['None'] + list(dataframe.columns)
+    y = st.selectbox("y axis", y_options)
+    plot_type = st.selectbox("plot type", ['line plot', 'scatter plot', 'box plot'])
+    st.dataframe(dataframe.head(5))
     st.text(plot_type)
+    x_axis_label = st.text_input('X label')
+    y_axis_label = st.text_input('Y label')
 
-if uploaded_file and x and y:
+if (dataframe is not None) and x:
     #st.line_chart(dataframe, x = x, y = y)
     fig, ax = plt.subplots()
     if plot_type == "line plot":
-        sns.lineplot(data=dataframe, x=x, y=y, ax=ax)
+        sns.lineplot(data=dataframe, x= None if x == 'None' else x, y= None if y == 'None' else y, ax=ax)
     elif plot_type == "scatter plot":
-        sns.scatterplot(data=dataframe, x=x, y=y, ax=ax)
-    else:
-        sns.boxplot(data=dataframe, x=x, y=y, ax=ax)
+        sns.scatterplot(data=dataframe, x= None if x == 'None' else x, y= None if y == 'None' else y, ax=ax)
+    elif plot_type == 'box plot':
+        sns.boxplot(data=dataframe, x= None if x == 'None' else x, y= None if y == 'None' else y, ax=ax)
+
+    plt.xlabel(x_axis_label)
+    plt.ylabel(y_axis_label)
     st.pyplot(fig)
 
     image_download_name = st.text_input("imagename", "image_name.png")
