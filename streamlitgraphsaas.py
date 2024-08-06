@@ -6,7 +6,7 @@ import seaborn as sns
 import io
 
 st.set_page_config(
-    page_title="Hello world",
+    page_title="Simplest Graph Creator",
     page_icon="chart_with_upwards_trend",
     layout="centered",
 )
@@ -46,7 +46,7 @@ if uploaded_file:
         elif st.session_state['file_other_excel_key']:
             dataframe = pd.read_excel(uploaded_file)
     except Exception as e:
-        st.error(f"Error loading file: {e}")
+        st.error(f"Error loading file: please select correct format")
 else:
     st.info("Please upload a file to proceed.")
 
@@ -66,7 +66,10 @@ if (dataframe is not None) and x:
     #st.line_chart(dataframe, x = x, y = y)
     fig, ax = plt.subplots()
     if plot_type == "line plot":
-        sns.lineplot(data=dataframe, x= None if x == 'None' else x, y= None if y == 'None' else y, ax=ax)
+        try:
+            sns.lineplot(data=dataframe, x= None if x == 'None' else x, y= None if y == 'None' else y, ax=ax)
+        except Exception as e:
+            st.error(f"Error loading file: line plot needs both x and y not just one")
     elif plot_type == "scatter plot":
         sns.scatterplot(data=dataframe, x= None if x == 'None' else x, y= None if y == 'None' else y, ax=ax)
     elif plot_type == 'box plot':
