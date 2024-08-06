@@ -57,7 +57,7 @@ if dataframe is not None:
     st.text(plot_type)
 
 if uploaded_file and x and y:
-    st.line_chart(dataframe, x = x, y = y)
+    #st.line_chart(dataframe, x = x, y = y)
     fig, ax = plt.subplots()
     if plot_type == "line plot":
         sns.lineplot(data=dataframe, x=x, y=y, ax=ax)
